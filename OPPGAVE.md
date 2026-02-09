@@ -145,6 +145,11 @@ Svaret ligger inne i init-database-sql filen.
 
 *   **SQL:**
     ```sql
+    SELECT beskjed_id, datetime_dato, innhold
+    FROM beskjed 
+    WHERE klasserom_id = 1 
+    ORDER BY datetime_dato DESC 
+    LIMIT 3;
     
     ```
 
@@ -167,6 +172,10 @@ Svaret ligger inne i init-database-sql filen.
 
 *   **SQL:**
     ```sql
+    SELECT bruker.bruker_id, bruker.brukernavn
+    FROM bruker 
+    JOIN medlemskap m ON bruker.bruker_id = medlemskap.bruker_id
+    WHERE medlemskap.gruppe_id = 1;
     
     ```
 
@@ -177,7 +186,9 @@ Svaret ligger inne i init-database-sql filen.
 
 *   **SQL:**
     ```sql
-    
+    SELECT COUNT(*) AS antall_gruppe
+    FROM gruppe;
+
     ```
 
 ## Del 5: Implementer i postgreSQL i din Docker container
