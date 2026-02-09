@@ -28,6 +28,40 @@ I et klasserom kan studentene lese beskjeder fra læreren. Hvert klasserom har o
 **Oppgave:** Beskriv en konseptuell datamodell (med tekst eller ER-diagram) for systemet. Modellen skal kun inneholde entiteter, som du har valgt, og forholdene mellom dem, med kardinalitet. Du trenger ikke spesifisere attributter i denne delen.
 
 **Ditt svar:***
+**Entiteter fra caset:
+Bruker
+Student
+Lærer
+Klasserom
+Gruppe
+Beskjed
+Innlegg
+
+Forholdene mellom dem, med kardinalitet:
+Bruker ↔ Gruppe 
+Bruker ↔ Beskjed 
+Bruker ↔ Innlegg 
+Klasserom ↔ Gruppe 
+Klasserom ↔ Beskjed 
+Klasserom ↔ Innlegg 
+Innlegg ↔ Innlegg 
+
+Mermaid:
+erDiagram
+    BRUKER
+    KLASSEROM
+    GRUPPE
+    BESKJED
+    INNLEGG
+    
+BRUKER ||--o{ BESKJED: sender    
+BRUKER ||--o{ INNLEGG: skriver
+KLASSEROM ||--o{ BESKJED : har
+BRUKER o{--o{ GRUPPE : medlem_av
+KLASSEROM o{--o{ GRUPPE : gir_tilgang
+KLASSEROM ||--o{INNLEGG: inneholder
+INNLEGG ||--o{ INNLEGG : svar_på
+
 
 
 ## Del 2: Logisk Skjema (Tabellstruktur)
@@ -36,6 +70,60 @@ I et klasserom kan studentene lese beskjeder fra læreren. Hvert klasserom har o
 
 
 **Ditt svar:***
+erDiagram
+    BRUKER{
+        int bruker_id PK
+        string brukernavn 
+        string passord
+    }
+
+    KLASSEROM{
+        int klasserom_id PK
+        string navn
+    }
+    GRUPPE{
+        int gruppe_id PK
+        string navn
+    }
+    BESKJED{
+        int beskjed_id PK
+        int klasserom_id FK
+        int bruker_id FK
+        int datetime_dato
+        string innhold
+    }
+    INNLEGG{
+        int innlegg_id PK
+        int bruker_id FK
+        int klasserom_id FK
+        int parent_id FK
+        string innhold
+    }
+    
+%%Koblingstabeller for m-m relasjoner
+Medlemskap{
+    int bruker_id
+    int gruppe_id
+}
+
+KLASSEROM_TILGANG{
+    int klasserom_id
+    int gruppe_id
+}
+
+BRUKER ||--o{ BESKJED: sender    
+BRUKER ||--o{ INNLEGG: skriver
+
+KLASSEROM ||--o{ BESKJED : tilhører
+KLASSEROM ||--o{INNLEGG: hører_til_klasserom
+
+INNLEGG ||--o{ INNLEGG : svar_på
+
+BRUKER ||--o{ MEDLEMSKAP : medlem_av
+GRUPPE ||--o{ MEDLEMSKAP : har_medlem
+
+GRUPPE ||--o{KLASSEROM_TILGANG: har_tilgang
+KLASSEROM ||--o{ KLASSEROM_TILGANG : gis_tilgang
 
 
 ## Del 3: Datadefinisjon (DDL) og Mock-Data
@@ -44,7 +132,7 @@ I et klasserom kan studentene lese beskjeder fra læreren. Hvert klasserom har o
 
 
 **Ditt svar:***
-
+Svaret ligger inne i init-database-sql filen.
 
 ## Del 4: Spørringer mot Databasen
 
